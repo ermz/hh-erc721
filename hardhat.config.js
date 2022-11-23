@@ -1,4 +1,3 @@
-/** @type import('hardhat/config').HardhatUserConfig */
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config()
 
@@ -37,11 +36,13 @@ module.exports = {
     outoutFile: "gas-reporter.txt",
     noColors: true
   },
-  solidity: [
-    {
-      version: "0.8.17",
-    }
-  ],
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.7"
+      }
+    ]
+  },
   namedAccounts: {
     deployer: {
       default: 0,
