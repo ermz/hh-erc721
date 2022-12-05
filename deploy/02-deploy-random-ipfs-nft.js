@@ -1,15 +1,29 @@
 const { network } = require("hardhat")
 const { developmentChains, networkConfig } = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify")
-const { storeImages } = require("../utils/uploadToPinata")
+const { storeImages, storeTokenUriMetadata } = require("../utils/uploadToPinata")
 
 const imagesLocation = "./images/random/"
 
-module.exports = async function ({ getNamedAccounts, deployments }) {
+
+const metadataTemplate = {
+    name: "",
+    descriptions: "",
+    image: "",
+    attributes: [
+        {
+            trait_type: "Cuteness",
+            value: 100,
+        },
+    ],
+}
+
+module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
-    let tokenUris
+    let tokenUris = []
+    
     // get the IPFS hashes of our images
 
     if (process.env.UPLOAD_TO_PINATA == "true") {
@@ -46,11 +60,27 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 }
 
 async function handleTokenUris() {
-    tokenUris = []
+    let tokenUris = []
     // store the image in IPFS
     // store the metadata in IPFS
 
+    const {responses: imageUploadResponses, files} = await storeImages(imagesLocation)
+    for (imageUploadResponseIndex in imageUploadResponses) {
+        //create metadata
+        // upload the metadata
+        let tokenUriMetadata = {...metadataTemplate}
+        tokenUriMetadata.name = files[imageUploadResponseIndex].replace(".png", "")
+        tokenUriMetadata.description = `An adorable ${tokenUriMetadata.name} pup!`
+        tokenUriMetadata.image = `ipfs://${imageUploadResponses[imageUploadResponseIndex].IpfsHash}`
+        console.log(`Uploading ${tokenUriMetadata.name}...`)
+        // store the JSON to pinata / iPFS
+        const metadataUploadResponse = await storeTokenUriMetadata(tokenUriMetadata)
+        tokenUris.push(`ipfs://${metadataUploadResponse.IpfsHash}`)
+    }
+    console.log("Token URIs Uploaded! They are:")
+    console.log(tokenUris)
     return tokenUris
 }
+
 
 module.exports.tags = ["all", "randomipfs", "main"]
