@@ -69,7 +69,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         from: deployer,
         args: args,
         log: true,
-        waitConfirmation: network.config.blockConfirmations || 1
+        waitConfirmation: network.config.blockConfirmations || 1,
     })
 
     log("-------------------------------------")
@@ -103,6 +103,5 @@ async function handleTokenUris() {
     return tokenUris
 }
 
-//comment for later
 
 module.exports.tags = ["all", "randomipfs", "main"]

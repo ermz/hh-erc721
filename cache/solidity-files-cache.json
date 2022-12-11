@@ -482,8 +482,8 @@
       ]
     },
     "/Users/edsonramirez/PythonProject/python_web3/hh-erc721/contracts/RandomIpfsNft.sol": {
-      "lastModificationDate": 1669785949621,
-      "contentHash": "0fe660a081241ee111770e5cc3253a19",
+      "lastModificationDate": 1670481432457,
+      "contentHash": "e6e60eed72cfa44ac54c35b9a25902c1",
       "sourceName": "contracts/RandomIpfsNft.sol",
       "solcConfig": {
         "version": "0.8.8",
