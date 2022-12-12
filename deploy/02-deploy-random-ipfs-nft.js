@@ -40,9 +40,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     // 2. Pinata
 
     let vrfCoordinatorV2Address
+    let vrfCoordinatorV2Mock
 
     if (developmentChains.includes(network.name)) {
-        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+        vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
         const tx = await vrfCoordinatorV2Mock.createSubscription()
         const txReceipt = await tx.wait(1)
@@ -71,6 +72,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         log: true,
         waitConfirmation: network.config.blockConfirmations || 1,
     })
+
+    if (developmentChains.includes(network.name)) {
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId.toNumber(), randomIpfsNft.address)
+    }
 
     log("-------------------------------------")
 
