@@ -13,6 +13,7 @@
     "@pinata/sdk": "^2.1.0",
     "@typechain/ethers-v5": "^10.1.1",
     "@typechain/hardhat": "^6.1.4",
+    "base64-sol": "^1.1.0",
     "chai": "^4.3.7",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
